@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security5"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="${title} ?: 'Your Cart'">Order Confirmation</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    <style>
+    .navbar-nav .nav-item .nav-link,
+    .navbar-nav .nav-item .navbar-brand {
+        font-size: 0.875rem; /* Kích thước chữ tùy chỉnh */
+    }
+    /* CSS tùy chỉnh cho hiệu ứng hover dropdown */
+    .nav-item.dropdown:hover .dropdown-menu {
+        display: block;
+    }
+    .dropdown-menu {
+        margin-top: 0;
+    }
+    /* Custom styles for sticky footer */
+    html, body {
+        height: 100%;
+    }
+    .footer {
+        color: white;
+        padding-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="header">
+  <div class="container">
+    <div class="row">
+      <a class="navbar-brand text-white" href="/products">
+        <img th:src="@{wwwroot/images/banner-1.png}" alt="Phuot STORE" height="90px" width="350px">
+      </a>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
+              <a class="nav-link text-white" th:href="@{/products/add}">Add New Product</a>
+            </li>
+            <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
+              <a class="nav-link text-white" th:href="@{/categories/add}">Add New Category</a>
+            </li>
+            <li class="nav-item dropdown" sec:authorize="hasAnyAuthority('USER')">
+              <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown1" role="button"
+                 data-bs-toggle="dropdown" aria-expanded="false">
+                Mũ 1/2
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                <li><a class="dropdown-item" th:href="@{/mu-em-be}">Mũ em bé</a></li>
+                <li><a class="dropdown-item" th:href="@{/kyt-tiger-yet}">KYT Tiger Yet</a></li>
+                <li><a class="dropdown-item" th:href="@{/poc-p05}">POC P05</a></li>
+                <li><a class="dropdown-item" th:href="@{/poc-p07}">POC P07</a></li>
+                <li><a class="dropdown-item" th:href="@{/poc-p20}">POC P20</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown" sec:authorize="hasAnyAuthority('USER')">
+              <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown2" role="button"
+                 data-bs-toggle="dropdown" aria-expanded="false">
+                Mũ 3/4
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                <li><a class="dropdown-item" th:href="@{/ls2-3-4}">LS2 3/4</a></li>
+                <li><a class="dropdown-item" th:href="@{/kyt}">KYT</a></li>
+                <li><a class="dropdown-item" th:href="@{/pull-dog}">Pull Dog</a></li>
+                <li><a class="dropdown-item" th:href="@{/royal}">Royal</a></li>
+                <li><a class="dropdown-item" th:href="@{/roc}">ROC</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown" sec:authorize="hasAnyAuthority('USER')">
+              <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown3" role="button"
+                 data-bs-toggle="dropdown" aria-expanded="false">
+                Mũ Fullface
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown3">
+                <li><a class="dropdown-item" th:href="@{/ls2}">LS2</a></li>
+                <li><a class="dropdown-item" th:href="@{/kyt}">KYT</a></li>
+                <li><a class="dropdown-item" th:href="@{/yohe}">Yohe</a></li>
+                <li><a class="dropdown-item" th:href="@{/agv}">AGV</a></li>
+                <li><a class="dropdown-item" th:href="@{/roc}">ROC</a></li>
+              </ul>
+            </li>
+            <li class="nav-item" sec:authorize="hasAnyAuthority('USER')">
+              <a class="nav-link text-white" th:href="@{/categories/givi}">GIVI</a>
+            </li>
+            <li class="nav-item dropdown" sec:authorize="hasAnyAuthority('USER')">
+              <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown4" role="button"
+                 data-bs-toggle="dropdown" aria-expanded="false">
+                Phụ kiện
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown4">
+                <li><a class="dropdown-item" th:href="@{/ao-giap}">Áo giáp</a></li>
+                <li><a class="dropdown-item" th:href="@{/kinh-mu-bao-hiem}">Kính mũ bảo hiểm</a></li>
+                <li><a class="dropdown-item" th:href="@{/tem-decal}">Tem Decal</a></li>
+                <li><a class="dropdown-item" th:href="@{/gang-tay}">Găng tay</a></li>
+              </ul>
+            </li>
+            <li class="nav-item" sec:authorize="hasAnyAuthority('USER')">
+              <a class="nav-link text-white" th:href="@{/categories/lien-he}">Liên hệ</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+            <li class="nav-item d-flex align-items-center" sec:authorize="isAuthenticated()">
+                            <span class="navbar-text text-white">Xin chào,
+                                <span sec:authentication="name" style="margin-right: 20px;"></span>
+                            </span>
+            </li>
+            <li class="nav-item" style="margin-left: 5px" sec:authorize="isAuthenticated()">
+              <form th:action="@{/logout}" method="post">
+                <button class="btn btn-outline-light" type="submit">Logout</button>
+              </form>
+            </li>
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
+              <a class="btn btn-outline-light" href="/login">Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+<section layout:fragment="content" class="container mt-3">
+  <h1>Order Confirmation</h1>
+  <p th:text="${message}"></p>
+</section>
+<footer class="footer mt-auto">
+  <div class="container" >
+    <div class="row navbar-light bg-primary text-white" style="margin: 0px">
+      <div class="col-md-8">
+        <h4>PHUOT STORE - Cửa hàng dành cho người đi phượt</h4>
+        <p>Địa chỉ: HUTECH Thuduc Campus - Khu CNC, Phường Hiệp Phú, Tp. Thủ Đức, Tp. Hồ Chí Minh</p>
+        <p>SĐT: 086.8895.261 </p>
+        <p>Email: pthuy200307@gmail.com
+      </div>
+      <div class="col-md-4 text-end">
+        <img th:src="@{wwwroot/images/banner-1.png}" alt="logo" height="90" width="350" />
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<script>
+  $(document).ready(function() {
+      $('.nav-item.dropdown').hover(function() {
+          $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(200);
+      }, function() {
+          $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(200);
+      });
+  });
+</script>
+</body>
+</html>
