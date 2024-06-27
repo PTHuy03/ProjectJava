@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Login</title>
     <link rel="stylesheet"
@@ -263,7 +262,7 @@
     </style>
 </head>
 <body>
-<section layout:fragment="content">
+<section>
     <div class="container" id="container">
         <div class="form-container sign-up-container">
             <form th:action="@{/register}" method="post">

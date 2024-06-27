@@ -17,10 +17,6 @@ import java.util.Optional;
 @Transactional
 public class CategoryService {
     private final CaterogyRepository categoryRepository;
-    /**
-     * Retrieve all categories from the database.
-     * @return a list of categories
-     */
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }

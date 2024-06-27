@@ -29,7 +29,7 @@ public class SecurityConfig {
     public DaoAuthenticationProvider authenticationProvider() {
         var auth = new DaoAuthenticationProvider(); // Tạo nhà cung cấp xác thực.
         auth.setUserDetailsService(userDetailsService()); // Thiết lập dịch vụ chitiết người dùng.
-        auth.setPasswordEncoder(passwordEncoder()); // Thiết lập cơ chế mã hóa mậtkhẩu.
+                auth.setPasswordEncoder(passwordEncoder()); // Thiết lập cơ chế mã hóa mậtkhẩu.
         return auth; // Trả về nhà cung cấp xác thực.
     }
     @Bean
@@ -37,40 +37,40 @@ public class SecurityConfig {
             throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/css/**", "/js/**", "/", "/oauth/**",
-                                "/register", "/error", "/products", "/cart", "/cart/**")
-                        .permitAll() // Cho phép truy cập không cần xác thực.
-                        .requestMatchers("/products/edit/**", "/products/add",
-                                "/products/delete")
-                        .hasAnyAuthority("ADMIN") // Chỉ cho phép ADMIN truy cập.
-                        .requestMatchers("/api/**")
-                        .permitAll() // API mở cho mọi người dùng.
-                        .anyRequest().authenticated() // Bất kỳ yêu cầu nào kháccần xác thực.
-                )
+                                .requestMatchers("/css/**", "/js/**", "/", "/oauth/**",
+                                        "/register", "/error", "/products", "/cart", "/cart/**")
+                                .permitAll() // Cho phép truy cập không cần xác thực.
+                                .requestMatchers("/products/edit/**", "/products/add",
+                                        "/products/delete/**", "/categories", "/categories/add", "/categories/edit/**", "/categories/delete/**")
+                                .hasAnyAuthority("ADMIN") // Chỉ cho phép ADMIN truy cập.
+                                .requestMatchers("/api/**")
+                                .permitAll() // API mở cho mọi người dùng.
+                                .anyRequest().authenticated() // Bất kỳ yêu cầu nào kháccần xác thực.
+                         )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login") // Trang chuyển hướng sau khiđăng xuất.
-                        .deleteCookies("JSESSIONID") // Xóa cookie.
-                        .invalidateHttpSession(true) // Hủy phiên làm việc.
-                        .clearAuthentication(true) // Xóa xác thực.
-                        .permitAll()
-                )
-                .formLogin(formLogin -> formLogin
-                        .loginPage("/login") // Trang đăng nhập.
-                        .loginProcessingUrl("/login") // URL xử lý đăng nhập.
-                        .defaultSuccessUrl("/products") // Trang sau đăng nhập thành công.
-                        .failureUrl("/login?error") // Trang đăng nhập thất bại.
-                        .permitAll()
-                )
+                                .logoutUrl("/logout")
+                                .logoutSuccessUrl("/login") // Trang chuyển hướng sau khiđăng xuất.
+                .deleteCookies("JSESSIONID") // Xóa cookie.
+                .invalidateHttpSession(true) // Hủy phiên làm việc.
+                .clearAuthentication(true) // Xóa xác thực.
+                .permitAll()
+)
+.formLogin(formLogin -> formLogin
+                .loginPage("/login") // Trang đăng nhập.
+                .loginProcessingUrl("/login") // URL xử lý đăng nhập.
+                .defaultSuccessUrl("/products") // Trang sau đăng nhập thành công.
+                .failureUrl("/login?error") // Trang đăng nhập thất bại.
+                .permitAll()
+        )
                 .rememberMe(rememberMe -> rememberMe
-                        .key("hutech")
-                        .rememberMeCookieName("hutech")
-                        .tokenValiditySeconds(24 * 60 * 60) // Thời gian nhớ đăng nhập.
-                        .userDetailsService(userDetailsService())
-                )
-                .exceptionHandling(exceptionHandling -> exceptionHandling
+                                .key("hutech")
+                                .rememberMeCookieName("hutech")
+                                .tokenValiditySeconds(24 * 60 * 60) // Thời gian nhớ đăng nhập.
+                .userDetailsService(userDetailsService())
+)
+.exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedPage("/403") // Trang báo lỗi khi truy cập không được phép.
-                )
+        )
                 .sessionManagement(sessionManagement -> sessionManagement
                         .maximumSessions(1) // Giới hạn số phiên đăng nhập.
                         .expiredUrl("/login") // Trang khi phiên hết hạn.
