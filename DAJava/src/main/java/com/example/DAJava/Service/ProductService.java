@@ -1,5 +1,6 @@
 package com.example.DAJava.Service;
 
+import com.example.DAJava.Model.Category;
 import com.example.DAJava.Model.Product;
 import com.example.DAJava.Repository.ProductRepository;
 import jakarta.validation.constraints.NotNull;
@@ -27,6 +28,10 @@ public class ProductService {
     public Product addProduct(Product product) {
         return productRepository.save(product);
     }
+
+    public List<Product> findByNameContaining(String name) {
+        return productRepository.findByNameContaining(name);
+    }
     // Update an existing product
     public Product updateProduct(@NotNull Product product) {
         Product existingProduct = productRepository.findById(product.getId())
@@ -44,5 +49,9 @@ public class ProductService {
             throw new IllegalStateException("Product with ID " + id + " does not exist.");
         }
         productRepository.deleteById(id);
+    }
+
+    public List<Product> findByCategoryName(String categoryName) {
+        return productRepository.findByCategory_Name(categoryName);
     }
 }

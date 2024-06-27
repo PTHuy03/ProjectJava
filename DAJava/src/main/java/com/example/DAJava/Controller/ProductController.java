@@ -127,4 +127,179 @@ public class ProductController {
         productService.deleteProductById(id);
         return "redirect:/products";
     }
+
+    @GetMapping("/mu-em-be")
+    public String muEmBe(Model model) {
+        // Lấy dữ liệu sản phẩm và lọc theo tên "Mũ em bé"
+        List<Product> products = productService.findByNameContaining("Mũ em bé");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/kyt-tiger-yet")
+    public String kytTigerYet(Model model) {
+        // Lấy dữ liệu sản phẩm và lọc theo tên "KYT Tiger Yet"
+        List<Product> products = productService.findByNameContaining("KYT Tiger Yet");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/poc-p05")
+    public String pocP05(Model model) {
+        // Lấy dữ liệu sản phẩm và lọc theo tên "POC P05"
+        List<Product> products = productService.findByNameContaining("POC P05");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/poc-p07")
+    public String pocP07(Model model) {
+        // Lấy dữ liệu sản phẩm và lọc theo tên "POC P07"
+        List<Product> products = productService.findByNameContaining("POC P07");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/poc-p20")
+    public String pocP20(Model model) {
+        // Lấy dữ liệu sản phẩm và lọc theo tên "POC P20"
+        List<Product> products = productService.findByNameContaining("POC P20");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+    // Mũ 3/4 routes
+    @GetMapping("/mu3-4-ls2")
+    public String ls23_4(Model model) {
+        List<Product> products = productService.findByNameContaining("Mũ 3/4 LS2");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/mu3-4-kyt")
+    public String kyt3_4(Model model) {
+        List<Product> products = productService.findByNameContaining("Mũ 3/4 KYT");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/mu3-4-pull-dog")
+    public String pullDog3_4(Model model) {
+        List<Product> products = productService.findByNameContaining("Mũ 3/4 Pull Dog");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/mu3-4-royal")
+    public String royal3_4(Model model) {
+        List<Product> products = productService.findByNameContaining("Mũ 3/4 Royal");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/mu3-4-roc")
+    public String roc3_4(Model model) {
+        List<Product> products = productService.findByNameContaining("Mũ 3/4 ROC");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    // Mũ Fullface routes
+    @GetMapping("/fullface-ls2")
+    public String fullfaceLS2(Model model) {
+        List<Product> products = productService.findByNameContaining("Mũ Fullface LS2");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/fullface-yohe")
+    public String fullfaceYohe(Model model) {
+        List<Product> products = productService.findByNameContaining("Mũ Fullface Yohe");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/fullface-kyt")
+    public String fullfaceKyt(Model model) {
+        List<Product> products = productService.findByNameContaining("Mũ Fullface KYT");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/fullface-agv")
+    public String fullfaceAgv(Model model) {
+        List<Product> products = productService.findByNameContaining("Mũ Fullface AGV");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/fullface-roc")
+    public String fullfaceRoc(Model model) {
+        List<Product> products = productService.findByNameContaining("Mũ Fullface ROC");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    // Phụ kiện routes
+    @GetMapping("/ao-giap")
+    public String aoGiap(Model model) {
+        List<Product> products = productService.findByNameContaining("Áo giáp");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/kinh-mu-bao-hiem")
+    public String kinhMuBaoHiem(Model model) {
+        List<Product> products = productService.findByNameContaining("Kính mũ bảo hiểm");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/tem-decal")
+    public String temDecal(Model model) {
+        List<Product> products = productService.findByNameContaining("Tem Decal");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/gang-tay")
+    public String gangTay(Model model) {
+        List<Product> products = productService.findByNameContaining("Găng tay");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/fullface")
+    public String fullface(Model model) {
+        List<Product> products = productService.findByCategoryName("MuFullface");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/mu1-2")
+    public String mu1_2(Model model) {
+        List<Product> products = productService.findByCategoryName("Mu1-2");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/mu3-4")
+    public String mu3_4(Model model) {
+        List<Product> products = productService.findByCategoryName("Mu3-4");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/givi")
+    public String GiVi(Model model) {
+        List<Product> products = productService.findByCategoryName("GiVi");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
+
+    @GetMapping("/phu-kien")
+    public String phukien(Model model) {
+        List<Product> products = productService.findByCategoryName("PhuKien");
+        model.addAttribute("products", products);
+        return "/products/products-list";
+    }
 }
