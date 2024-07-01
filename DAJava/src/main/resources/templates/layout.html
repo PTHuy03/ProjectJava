@@ -147,8 +147,8 @@
                     </ul>
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
                         <li class="nav-item">
-                            <form class="input-group search-bar search_form" action="/search" method="get" role="search">
-                                <input type="search" name="query" value="" placeholder="Tìm kiếm sản phẩm..." class="form-control input-group-field st-default-search-input search-text" autocomplete="off">
+                            <form class="input-group search-bar search_form" th:action="@{/search}" method="get" role="search">
+                                <input type="search" name="query" th:value="${query}" class="form-control input-group-field st-default-search-input search-text" placeholder="Tìm kiếm sản phẩm..." autocomplete="off">
                                 <button type="submit" class="btn btn-outline-secondary btn-search">
                                     <i class="fa fa-search"></i>
                                 </button>

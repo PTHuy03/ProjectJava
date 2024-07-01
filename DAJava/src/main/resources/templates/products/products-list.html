@@ -20,7 +20,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="product : ${products}">
+            <tr th:each="product : ${productPage.content}">
                 <td th:text="${product.name}"></td>
                 <td th:text="${product.price}"></td>
                 <td>
@@ -37,7 +37,7 @@
     </div>
     <div sec:authorize="hasAuthority('USER')">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-            <div th:each="product : ${products}" class="col">
+            <div th:each="product : ${productPage.content}" class="col">
                 <div class="card h-100 shadow-sm">
                     <a th:href="@{/products/{id}(id=${product.id})}" style="text-decoration: none;" class="text-dark">
                         <img th:src="@{${product.image}}" class="card-img-top" alt="Product Image">
@@ -60,6 +60,26 @@
             </div>
         </div>
     </div>
+    <nav>
+        <ul class="pagination mt-3 justify-content-end"> <!-- Sử dụng justify-content-end để căn phải -->
+            <li class="page-item" th:classappend="${productPage.first} ? 'disabled'">
+                <a class="page-link" th:href="@{${paginationUrl}(page=${productPage.number - 1}, size=${productPage.size})}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, productPage.totalPages - 1)}"
+                th:classappend="${i == productPage.number} ? 'active'">
+                <a class="page-link" th:href="@{${paginationUrl}(page=${i}, size=${productPage.size})}" th:text="${i + 1}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${productPage.last} ? 'disabled'">
+                <a class="page-link" th:href="@{${paginationUrl}(page=${productPage.number + 1}, size=${productPage.size})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+
 </section>
 </body>
 </html>

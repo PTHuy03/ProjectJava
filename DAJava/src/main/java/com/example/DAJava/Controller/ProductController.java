@@ -6,6 +6,9 @@ import com.example.DAJava.Service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,10 +19,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,11 +37,20 @@ public class ProductController {
     @Autowired
     private CategoryService categoryService; // Đảm bảo bạn đã inject CategoryService
 
-    @GetMapping("/products")
-    public String showProductList(Model model) {
-        List<Product> products = productService.getAllProducts();
-        model.addAttribute("products", products);
+//    @GetMapping("/products")
+//    public String showProductList(Model model) {
+//        List<Product> products = productService.getAllProducts();
+//        model.addAttribute("products", products);
+//        return "/products/products-list";
+//    }
 
+    @GetMapping("/products")
+    public String listProducts(Model model,
+                               @RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findAll(pageable);
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
@@ -48,15 +64,31 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public String searchProducts(@RequestParam(name = "query", required = false) String query, Model model) {
-        if (query != null && !query.isEmpty()) {
-            List<Product> searchResults = productService.searchProducts(query);
-            model.addAttribute("products", searchResults);
-        } else {
-            List<Product> allProducts = productService.getAllProducts();
-            model.addAttribute("products", allProducts);
+    public String searchProducts(
+            @RequestParam(name = "query", required = false) String query,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size,
+            Model model) {
+        try {
+            if (query != null && !query.isEmpty()) {
+                query = URLDecoder.decode(query, StandardCharsets.UTF_8.toString()); // Giải mã URL
+            }
+        } catch (UnsupportedEncodingException e) {
+            // Xử lý ngoại lệ nếu cần thiết
+            e.printStackTrace();
         }
-        return "/products/products-list"; // Trả về view products.html
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage;
+        if (query != null && !query.isEmpty()) {
+            productPage = productService.searchProducts(query, pageable);
+        } else {
+            productPage = productService.findAll(pageable);
+        }
+        model.addAttribute("productPage", productPage);
+        model.addAttribute("paginationUrl", "/search?query=" + (query != null ? query : ""));
+        model.addAttribute("query", query);
+        return "/products/products-list";
     }
 
 
@@ -151,183 +183,251 @@ public class ProductController {
     }
 
     @GetMapping("/mu-em-be")
-    public String muEmBe(Model model) {
-        // Lấy dữ liệu sản phẩm và lọc theo tên "Mũ em bé"
-        List<Product> products = productService.findByNameContaining("Mũ em bé");
-        model.addAttribute("products", products);
+    public String muEmBe(Model model,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByNameContaining("Nón trẻ em", pageable);
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     @GetMapping("/kyt-tiger-yet")
-    public String kytTigerYet(Model model) {
-        // Lấy dữ liệu sản phẩm và lọc theo tên "KYT Tiger Yet"
-        List<Product> products = productService.findByNameContaining("KYT Tiger Yet");
-        model.addAttribute("products", products);
+    public String kytTigerYet(Model model,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByNameContaining("KYT Tiger Jet", pageable);
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     @GetMapping("/poc-p05")
-    public String pocP05(Model model) {
-        // Lấy dữ liệu sản phẩm và lọc theo tên "POC P05"
-        List<Product> products = productService.findByNameContaining("POC P05");
-        model.addAttribute("products", products);
+    public String pocP05(Model model,
+                         @RequestParam(defaultValue = "0") int page,
+                         @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByNameContaining("POC P05", pageable);
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     @GetMapping("/poc-p07")
-    public String pocP07(Model model) {
-        // Lấy dữ liệu sản phẩm và lọc theo tên "POC P07"
-        List<Product> products = productService.findByNameContaining("POC P07");
-        model.addAttribute("products", products);
+    public String pocP07(Model model,
+                         @RequestParam(defaultValue = "0") int page,
+                         @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByNameContaining("POC P07", pageable);
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     @GetMapping("/poc-p20")
-    public String pocP20(Model model) {
-        // Lấy dữ liệu sản phẩm và lọc theo tên "POC P20"
-        List<Product> products = productService.findByNameContaining("POC P20");
-        model.addAttribute("products", products);
+    public String pocP20(Model model,
+                         @RequestParam(defaultValue = "0") int page,
+                         @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByNameContaining("POC P20", pageable);
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
     // Mũ 3/4 routes
     @GetMapping("/mu3-4-ls2")
-    public String ls23_4(Model model) {
-        List<Product> products = productService.findByNameContaining("Mũ 3/4 LS2");
-        model.addAttribute("products", products);
+    public String ls23_4(Model model,
+                         @RequestParam(defaultValue = "0") int page,
+                         @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByNameContaining("Mũ 3/4 LS2", pageable);
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     @GetMapping("/mu3-4-kyt")
-    public String kyt3_4(Model model) {
-        List<Product> products = productService.findByNameContaining("Mũ 3/4 KYT");
-        model.addAttribute("products", products);
+    public String kyt3_4(Model model,
+                         @RequestParam(defaultValue = "0") int page,
+                         @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByNameContaining("Mũ 3/4 KYT", pageable);
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     @GetMapping("/mu3-4-pull-dog")
-    public String pullDog3_4(Model model) {
-        List<Product> products = productService.findByNameContaining("Mũ 3/4 Pull Dog");
-        model.addAttribute("products", products);
+    public String pullDog3_4(Model model,
+                             @RequestParam(defaultValue = "0") int page,
+                             @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByNameContaining("Mũ 3/4 BullDog", pageable);
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     @GetMapping("/mu3-4-royal")
-    public String royal3_4(Model model) {
-        List<Product> products = productService.findByNameContaining("Mũ 3/4 Royal");
-        model.addAttribute("products", products);
+    public String royal3_4(Model model,
+                           @RequestParam(defaultValue = "0") int page,
+                           @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByNameContaining("Mũ 3/4 Royal", pageable);
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     @GetMapping("/mu3-4-roc")
-    public String roc3_4(Model model) {
-        List<Product> products = productService.findByNameContaining("Mũ 3/4 ROC");
-        model.addAttribute("products", products);
+    public String roc3_4(Model model,
+                         @RequestParam(defaultValue = "0") int page,
+                         @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByNameContaining("Mũ 3/4 ROC", pageable);
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     // Mũ Fullface routes
     @GetMapping("/fullface-ls2")
-    public String fullfaceLS2(Model model) {
-        List<Product> products = productService.findByNameContaining("Mũ Fullface LS2");
-        model.addAttribute("products", products);
+    public String fullfaceLS2(Model model,
+                              @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByNameContaining("Mũ Fullface LS2", pageable);
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     @GetMapping("/fullface-yohe")
-    public String fullfaceYohe(Model model) {
-        List<Product> products = productService.findByNameContaining("Mũ Fullface Yohe");
-        model.addAttribute("products", products);
+    public String fullfaceYohe(Model model,
+                               @RequestParam(defaultValue = "0") int page,
+                               @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByNameContaining("Mũ Fullface Yohe", pageable);
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     @GetMapping("/fullface-kyt")
-    public String fullfaceKyt(Model model) {
-        List<Product> products = productService.findByNameContaining("Mũ Fullface KYT");
-        model.addAttribute("products", products);
+    public String fullfaceKyt(Model model,
+                              @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByNameContaining("Mũ Fullface KYT", pageable);
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     @GetMapping("/fullface-agv")
-    public String fullfaceAgv(Model model) {
-        List<Product> products = productService.findByNameContaining("Mũ Fullface AGV");
-        model.addAttribute("products", products);
+    public String fullfaceAgv(Model model,
+                              @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByNameContaining("Mũ Fullface AGV", pageable);
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     @GetMapping("/fullface-roc")
-    public String fullfaceRoc(Model model) {
-        List<Product> products = productService.findByNameContaining("Mũ Fullface ROC");
-        model.addAttribute("products", products);
+    public String fullfaceRoc(Model model,
+                              @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByNameContaining("Mũ Fullface ROC", pageable);
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     // Phụ kiện routes
     @GetMapping("/ao-giap")
-    public String aoGiap(Model model) {
-        List<Product> products = productService.findByNameContaining("Áo giáp");
-        model.addAttribute("products", products);
+    public String aoGiap(Model model,
+                         @RequestParam(defaultValue = "0") int page,
+                         @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByNameContaining("Áo giáp", pageable);
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     @GetMapping("/kinh-mu-bao-hiem")
-    public String kinhMuBaoHiem(Model model) {
-        String categoryName = "PhuKien"; // category name in Vietnamese
-        String productName = "Kinh"; // product name contains this string
-
-        List<Product> products = productService.findByCategoryNameAndProductNameContaining(categoryName, productName);
-        model.addAttribute("products", products);
+    public String kinhMuBaoHiem(Model model,
+                                @RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByCategoryNameAndProductNameContaining("Phukien", "Kinh", pageable);
+        model.addAttribute("productPage", productPage);
         return "products/products-list";
     }
 
     @GetMapping("/tem-decal")
-    public String temDecal(Model model) {
-        String categoryName = "PhuKien"; // category name in Vietnamese
-        String productName = "Tem Decal"; // product name contains this string
+    public String temDecal(Model model,
+                           @RequestParam(defaultValue = "0") int page,
+                           @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByCategoryNameAndProductNameContaining("Phukien", "Tem Decal", pageable);
 
-        List<Product> products = productService.findByCategoryNameAndProductNameContaining(categoryName, productName);
-        model.addAttribute("products", products);
+        model.addAttribute("productPage", productPage);
         return "products/products-list";
     }
 
     @GetMapping("/gang-tay")
-    public String gangTay(Model model) {
-        List<Product> products = productService.findByNameContaining("Găng tay");
-        model.addAttribute("products", products);
+    public String gangTay(Model model,
+                          @RequestParam(defaultValue = "0") int page,
+                          @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByNameContaining("Găng tay", pageable);
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     @GetMapping("/fullface")
-    public String fullface(Model model) {
-        List<Product> products = productService.findByCategoryName("MuFullface");
-        model.addAttribute("products", products);
+    public String fullface(@RequestParam(defaultValue = "0") int page,
+                           @RequestParam(defaultValue = "8") int size,
+                           Model model) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByCategoryName("MuFullface", pageable);
+
+        model.addAttribute("productPage", productPage);
+
         return "/products/products-list";
     }
 
     @GetMapping("/mu1-2")
-    public String mu1_2(Model model) {
-        List<Product> products = productService.findByCategoryName("Mu1-2");
-        model.addAttribute("products", products);
+    public String mu1_2(@RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "8") int size,
+                        Model model) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByCategoryName("Mu1-2", pageable);
+
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     @GetMapping("/mu3-4")
-    public String mu3_4(Model model) {
-        List<Product> products = productService.findByCategoryName("Mu3-4");
-        model.addAttribute("products", products);
+    public String mu3_4(@RequestParam(defaultValue = "0") int page,
+                        @RequestParam(defaultValue = "8") int size,
+                        Model model) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByCategoryName("Mu3-4", pageable);
+
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     @GetMapping("/givi")
-    public String GiVi(Model model) {
-        List<Product> products = productService.findByCategoryName("GiVi");
-        model.addAttribute("products", products);
+    public String GiVi(@RequestParam(defaultValue = "0") int page,
+                       @RequestParam(defaultValue = "8") int size,
+                       Model model) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByCategoryName("Givi", pageable);
+
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 
     @GetMapping("/phu-kien")
-    public String phukien(Model model) {
-        List<Product> products = productService.findByCategoryName("PhuKien");
-        model.addAttribute("products", products);
+    public String phukien(@RequestParam(defaultValue = "0") int page,
+                          @RequestParam(defaultValue = "8") int size,
+                          Model model) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productService.findByCategoryName("Phukien", pageable);
+
+        model.addAttribute("productPage", productPage);
         return "/products/products-list";
     }
 }
