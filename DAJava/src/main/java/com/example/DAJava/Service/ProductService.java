@@ -63,4 +63,8 @@ public class ProductService {
         // Example:
         return productRepository.findByNameContaining(query);
     }
+
+    public List<Product> findByCategoryNameAndProductNameContaining(String categoryName, String productName) {
+        return productRepository.findByCategoryNameAndProductNameContaining(categoryName, productName);
+    }
 }

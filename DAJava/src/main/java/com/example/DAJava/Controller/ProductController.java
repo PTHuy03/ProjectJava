@@ -271,16 +271,22 @@ public class ProductController {
 
     @GetMapping("/kinh-mu-bao-hiem")
     public String kinhMuBaoHiem(Model model) {
-        List<Product> products = productService.findByNameContaining("Kính mũ bảo hiểm");
+        String categoryName = "PhuKien"; // category name in Vietnamese
+        String productName = "Kinh"; // product name contains this string
+
+        List<Product> products = productService.findByCategoryNameAndProductNameContaining(categoryName, productName);
         model.addAttribute("products", products);
-        return "/products/products-list";
+        return "products/products-list";
     }
 
     @GetMapping("/tem-decal")
     public String temDecal(Model model) {
-        List<Product> products = productService.findByNameContaining("Tem Decal");
+        String categoryName = "PhuKien"; // category name in Vietnamese
+        String productName = "Tem Decal"; // product name contains this string
+
+        List<Product> products = productService.findByCategoryNameAndProductNameContaining(categoryName, productName);
         model.addAttribute("products", products);
-        return "/products/products-list";
+        return "products/products-list";
     }
 
     @GetMapping("/gang-tay")
