@@ -38,7 +38,7 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers("/css/**", "/js/**", "/", "/oauth/**",
-                                        "/register", "/error", "/products", "/cart", "/cart/**")
+                                        "/register", "/error", "/products", "/cart", "/cart/**", "/products/**")
                                 .permitAll() // Cho phép truy cập không cần xác thực.
                                 .requestMatchers("/products/edit/**", "/products/add",
                                         "/products/delete/**", "/categories", "/categories/add", "/categories/edit/**", "/categories/delete/**")
@@ -49,28 +49,28 @@ public class SecurityConfig {
                          )
                 .logout(logout -> logout
                                 .logoutUrl("/logout")
-                                .logoutSuccessUrl("/login") // Trang chuyển hướng sau khiđăng xuất.
-                .deleteCookies("JSESSIONID") // Xóa cookie.
-                .invalidateHttpSession(true) // Hủy phiên làm việc.
-                .clearAuthentication(true) // Xóa xác thực.
-                .permitAll()
-)
-.formLogin(formLogin -> formLogin
-                .loginPage("/login") // Trang đăng nhập.
-                .loginProcessingUrl("/login") // URL xử lý đăng nhập.
-                .defaultSuccessUrl("/products") // Trang sau đăng nhập thành công.
-                .failureUrl("/login?error") // Trang đăng nhập thất bại.
-                .permitAll()
-        )
+                                .logoutSuccessUrl("/login") // Trang chuyển hướng sau khi đăng xuất.
+                                .deleteCookies("JSESSIONID") // Xóa cookie.
+                                .invalidateHttpSession(true) // Hủy phiên làm việc.
+                                .clearAuthentication(true) // Xóa xác thực.
+                                .permitAll()
+                )
+                .formLogin(formLogin -> formLogin
+                                .loginPage("/login") // Trang đăng nhập.
+                                .loginProcessingUrl("/login") // URL xử lý đăng nhập.
+                                .defaultSuccessUrl("/products") // Trang sau đăng nhập thành công.
+                                .failureUrl("/login?error") // Trang đăng nhập thất bại.
+                                .permitAll()
+                )
                 .rememberMe(rememberMe -> rememberMe
                                 .key("hutech")
                                 .rememberMeCookieName("hutech")
                                 .tokenValiditySeconds(24 * 60 * 60) // Thời gian nhớ đăng nhập.
                 .userDetailsService(userDetailsService())
-)
-.exceptionHandling(exceptionHandling -> exceptionHandling
+                )
+                .exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedPage("/403") // Trang báo lỗi khi truy cập không được phép.
-        )
+                )
                 .sessionManagement(sessionManagement -> sessionManagement
                         .maximumSessions(1) // Giới hạn số phiên đăng nhập.
                         .expiredUrl("/login") // Trang khi phiên hết hạn.

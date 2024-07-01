@@ -54,4 +54,13 @@ public class ProductService {
     public List<Product> findByCategoryName(String categoryName) {
         return productRepository.findByCategory_Name(categoryName);
     }
+
+    public Product findById(Long id) {
+        return productRepository.findById(id).orElse(null);
+    }
+
+    public List<Product> searchProducts(String query) {
+        // Example:
+        return productRepository.findByNameContaining(query);
+    }
 }

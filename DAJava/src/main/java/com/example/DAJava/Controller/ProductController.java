@@ -30,13 +30,35 @@ public class ProductController {
     @Autowired
     private CategoryService categoryService; // Đảm bảo bạn đã inject CategoryService
 
-    // Display a list of all products
     @GetMapping("/products")
     public String showProductList(Model model) {
-        List<Product> productList = productService.getAllProducts();
-        model.addAttribute("products", productList);
+        List<Product> products = productService.getAllProducts();
+        model.addAttribute("products", products);
+
         return "/products/products-list";
     }
+
+    @GetMapping("/products/{id}")
+    public String showProductDetail(@PathVariable Long id, Model model) {
+        Product product = productService.findById(id);
+        if (product != null) {
+            model.addAttribute("product", product);
+        }
+        return "products/page-details";
+    }
+
+    @GetMapping("/search")
+    public String searchProducts(@RequestParam(name = "query", required = false) String query, Model model) {
+        if (query != null && !query.isEmpty()) {
+            List<Product> searchResults = productService.searchProducts(query);
+            model.addAttribute("products", searchResults);
+        } else {
+            List<Product> allProducts = productService.getAllProducts();
+            model.addAttribute("products", allProducts);
+        }
+        return "/products/products-list"; // Trả về view products.html
+    }
+
 
     // For adding a new product
     @GetMapping("/products/add")

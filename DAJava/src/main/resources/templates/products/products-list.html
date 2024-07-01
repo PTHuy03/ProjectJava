@@ -3,11 +3,12 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security5"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
+    <meta charset="UTF-8">
     <title th:text="${title} ?: 'Products List'">Products List</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
-<section layout:fragment="content" class="container ">
+<section layout:fragment="content" class="container">
     <div class="mt-5" sec:authorize="hasAuthority('ADMIN')">
         <table class="table table-bordered table-hover">
             <thead class="table-dark">
@@ -35,24 +36,17 @@
         </table>
     </div>
     <div sec:authorize="hasAuthority('USER')">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
-                <li class="breadcrumb-item" th:each="breadcrumb : ${breadcrumbs}" th:class="${#strings.startsWith(#httpServletRequest.getRequestURI(), breadcrumb.url) ? 'active' : ''}">
-                    <a th:href="@{${breadcrumb.url}}" th:text="${breadcrumb.label}"></a>
-                </li>
-            </ol>
-        </nav>
-
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
             <div th:each="product : ${products}" class="col">
                 <div class="card h-100 shadow-sm">
-                    <img th:src="@{${product.image}}" class="card-img-top" alt="Product Image">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${product.name}"></h5>
-                        <p class="card-text" th:text="${product.description}"></p>
-                        <p class="card-text"><small class="text-muted" th:text="'Price: $' + ${product.price}"></small></p>
-                    </div>
+                    <a th:href="@{/products/{id}(id=${product.id})}" style="text-decoration: none;" class="text-dark">
+                        <img th:src="@{${product.image}}" class="card-img-top" alt="Product Image">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${product.name}"></h5>
+                            <p class="card-text" th:text="${product.description}"></p>
+                            <p class="card-text"><small class="text-muted" th:text="'Price: $' + ${product.price}"></small></p>
+                        </div>
+                    </a>
                     <div class="card-footer d-flex justify-content-between align-items-center">
                         <form th:action="@{/cart/add}" method="post" class="d-inline-block">
                             <div class="input-group">
