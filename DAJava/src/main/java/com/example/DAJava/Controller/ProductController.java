@@ -37,13 +37,6 @@ public class ProductController {
     @Autowired
     private CategoryService categoryService; // Đảm bảo bạn đã inject CategoryService
 
-//    @GetMapping("/products")
-//    public String showProductList(Model model) {
-//        List<Product> products = productService.getAllProducts();
-//        model.addAttribute("products", products);
-//        return "/products/products-list";
-//    }
-
     @GetMapping("/products")
     public String listProducts(Model model,
                                @RequestParam(defaultValue = "0") int page,
