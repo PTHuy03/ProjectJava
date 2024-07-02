@@ -3,9 +3,11 @@ package com.example.DAJava.Model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.Data;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;

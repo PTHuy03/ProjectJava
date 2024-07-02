@@ -7,33 +7,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @Controller
 @RequestMapping("/cart")
+@SessionAttributes("cartItems")
 public class CartController {
+
     @Autowired
     private CartService cartService;
-    @Autowired
-    private ProductRepository productRepository;
+
+    @ModelAttribute("cartItems")
+    public List<CartItem> cartItems() {
+        return cartService.getCartItems();
+    }
 
     @GetMapping
     public String showCart(Model model) {
         model.addAttribute("cartItems", cartService.getCartItems());
         return "/cart/cart";
     }
+
     @PostMapping("/add")
     public String addToCart(@RequestParam Long productId, @RequestParam int quantity) {
-        // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
         boolean productExists = false;
         for (CartItem item : cartService.getCartItems()) {
             if (item.getProduct().getId().equals(productId)) {
-                // Nếu sản phẩm đã tồn tại, cập nhật số lượng
                 item.setQuantity(item.getQuantity() + quantity);
                 productExists = true;
                 break;
             }
         }
 
-        // Nếu sản phẩm chưa tồn tại, thêm một mục mới vào giỏ hàng
         if (!productExists) {
             cartService.addToCart(productId, quantity);
         }
@@ -42,9 +48,8 @@ public class CartController {
     }
 
     @GetMapping("/update")
-    public String updateQuantity(Long productId, int quantity) {
-        // Gọi phương thức updateQuantity của CartService để cập nhật số lượng
-        cartService.updatetoQuanlity(productId, quantity);
+    public String updateQuantity(@RequestParam Long productId, @RequestParam int quantity) {
+        cartService.updateQuantity(productId, quantity);
         return "redirect:/cart";
     }
 
@@ -53,6 +58,7 @@ public class CartController {
         cartService.removeFromCart(productId);
         return "redirect:/cart";
     }
+
     @GetMapping("/clear")
     public String clearCart() {
         cartService.clearCart();
